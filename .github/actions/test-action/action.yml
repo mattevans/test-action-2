@@ -1,0 +1,14 @@
+name: Test Action
+description: Test composite action outputs
+
+outputs:
+  test_output:
+    description: Test output
+    value: ${{ steps.test_step.outputs.test_output }}
+
+runs:
+  using: composite
+  steps:
+    - id: test_step
+      shell: bash
+      run: echo "test_output=test_value" >> $GITHUB_OUTPUT

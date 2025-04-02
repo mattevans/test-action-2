@@ -1,0 +1,35 @@
+name: Test Workflow
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test-with-id:
+    runs-on: ubuntu-latest
+    outputs:
+      test_output: ${{ steps.with_id.outputs.test_output }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/test-action
+        id: with_id
+      - run: echo "With ID: ${{ steps.with_id.outputs.test_output }}"
+        
+  test-without-id:
+    runs-on: ubuntu-latest
+    outputs:
+      test_output: ${{ steps.without_id_reference.outputs.test_output }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/test-action
+        # No ID specified here
+      - id: without_id_reference
+        run: echo "Without ID (should be empty): ${{ steps.test-action.outputs.test_output }}"
+        
+  verify-outputs:
+    needs: [test-with-id, test-without-id]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "With ID from job output: ${{ needs.test-with-id.outputs.test_output }}"
+          echo "Without ID from job output: ${{ needs.test-without-id.outputs.test_output }}"
