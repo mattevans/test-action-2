@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/test-action
         id: with_id
-      - run: echo "With ID: ${{ steps.with_id.outputs.test_output }}"
+      - run: 'echo "With ID: ${{ steps.with_id.outputs.test_output }}"'
         
   test-without-id:
     runs-on: ubuntu-latest
@@ -24,7 +24,7 @@ jobs:
       - uses: ./.github/actions/test-action
         # No ID specified here
       - id: without_id_reference
-        run: echo "Without ID (should be empty): ${{ steps.test-action.outputs.test_output }}"
+        run: 'echo "Without ID (should be empty): ${{ steps.test-action.outputs.test_output }}"'
         
   verify-outputs:
     needs: [test-with-id, test-without-id]
